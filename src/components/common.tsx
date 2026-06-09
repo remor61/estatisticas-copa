@@ -12,6 +12,7 @@ export function TeamFlag({ teamId, size = 22 }: { teamId: number; size?: number 
       height={size}
       alt=""
       loading="lazy"
+      referrerPolicy="no-referrer"
       onError={(ev) => {
         ev.currentTarget.style.visibility = 'hidden'
       }}
