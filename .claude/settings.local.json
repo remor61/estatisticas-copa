@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.api-football.com)",
+      "WebSearch",
+      "WebFetch(domain:api-sports.io)",
+      "Bash(curl -sL --max-time 30 -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/126.0.0.0 Safari/537.36\" \"https://www.api-football.com/news/post/fifa-world-cup-2026-guide-to-using-data-with-api-sports\")",
+      "Bash(gh auth *)",
+      "Bash(npm --version)",
+      "Bash(curl -s --max-time 20 -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/126.0.0.0 Safari/537.36\" -H \"Accept: application/json\" \"https://inside.fifa.com/api/ranking-overview?locale=en\" -o /tmp/fifa_ranking.json -w \"HTTP %{http_code}, %{size_download} bytes\")",
+      "Read(//tmp/**)",
+      "Bash(curl -s --max-time 20 -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/126.0.0.0 Safari/537.36\" -H \"Accept: application/json\" \"https://api.sofascore.com/api/v1/search/all?q=brazil%20football\" -o /tmp/sofa.json -w \"HTTP %{http_code}, %{size_download} bytes\")",
+      "Bash(curl -sI --max-time 15 -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/126.0.0.0 Safari/537.36\" \"https://api.sofascore.com/api/v1/search/all?q=brazil\")",
+      "Bash(curl -s --max-time 15 -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/126.0.0.0 Safari/537.36\" -H \"Referer: https://www.sofascore.com/\" -H \"Accept: */*\" \"https://www.sofascore.com/api/v1/search/all?q=brazil\" -w \"\\\\nHTTP %{http_code}\")"
+    ]
+  }
+}
