@@ -66,7 +66,8 @@ async function rawGet(path: string): Promise<unknown | null> {
   await acquire()
   try {
     for (let attempt = 0; ; attempt++) {
-      const res = await fetch(BASE + path)
+      // Sofascore bloqueia requisições com Referer de outros domínios
+      const res = await fetch(BASE + path, { referrerPolicy: 'no-referrer' })
       if (res.status === 404) return null
       if (res.ok) return (await res.json()) as unknown
       const retryable = res.status === 429 || res.status >= 500
