@@ -62,11 +62,12 @@ export function stageLabel(e: SlimEvent): string {
 export function resultFor(e: SlimEvent, teamId: number): 'V' | 'E' | 'D' | null {
   if (e.statusType !== 'finished') return null
   const isHome = e.homeTeam.id === teamId
+  // Placar igual no display = empate no tempo regulamentar (pênaltis não alteram o placar exibido)
+  if (e.homeScore != null && e.awayScore != null && e.homeScore === e.awayScore) return 'E'
   if (e.winnerCode === 3) return 'E'
   if (e.winnerCode === 1) return isHome ? 'V' : 'D'
   if (e.winnerCode === 2) return isHome ? 'D' : 'V'
   if (e.homeScore != null && e.awayScore != null) {
-    if (e.homeScore === e.awayScore) return 'E'
     const homeWon = e.homeScore > e.awayScore
     return homeWon === isHome ? 'V' : 'D'
   }
