@@ -269,6 +269,34 @@ button:hover {
   margin-top: 12px;
 }
 
+.form-summaries {
+  display: flex;
+  justify-content: center;
+  gap: 8px 28px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 0.83rem;
+}
+
+.form-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.form-team {
+  font-weight: 600;
+}
+
+.fs-w { color: var(--win); font-weight: 700; }
+.fs-d { color: var(--draw); font-weight: 700; }
+.fs-l { color: var(--loss); font-weight: 700; }
+
+.fs-avg {
+  font-variant-numeric: tabular-nums;
+}
+
 .window-control {
   display: flex;
   align-items: center;

@@ -13,9 +13,45 @@ import {
 import type { FifaRanking, SlimEvent, Team } from '../api/types'
 import { ErrorBox, Loading, OddsChips, SectionCard, TeamFlag } from '../components/common'
 import { FormTable } from '../components/FormTable'
-import { formatDateLong, formatTime, stageLabel } from '../lib/format'
+import { formatDateLong, formatTime, goalsAgainst, goalsFor, resultFor, stageLabel } from '../lib/format'
 import { useAsync } from '../lib/useAsync'
 import { usePossessions } from '../lib/usePossessions'
+
+function TeamFormSummary({ team }: { team: Team }) {
+  const { data, loading } = useAsync(() => getTeamRecentEvents(team.id), [team.id])
+  const last10 = useMemo(() => (data ?? []).slice(0, 10), [data])
+
+  const stats = useMemo(() => {
+    let w = 0, d = 0, l = 0, gf = 0, ga = 0, count = 0
+    for (const e of last10) {
+      const r = resultFor(e, team.id)
+      if (r === 'V') w++
+      else if (r === 'E') d++
+      else if (r === 'D') l++
+      const g = goalsFor(e, team.id)
+      const gc = goalsAgainst(e, team.id)
+      if (g != null && gc != null) { gf += g; ga += gc; count++ }
+    }
+    return { w, d, l, n: last10.length, gf: count ? gf / count : null, ga: count ? ga / count : null }
+  }, [last10, team.id])
+
+  const fmt = (v: number | null) => v == null ? '–' : v.toFixed(1).replace('.', ',')
+
+  if (loading) return <div className="form-summary"><span className="muted">carregando…</span></div>
+  if (!last10.length) return null
+
+  return (
+    <div className="form-summary">
+      <TeamFlag teamId={team.id} size={16} />
+      <span className="form-team">{team.shortName ?? team.nameCode ?? team.name}</span>
+      <span className="muted">últ.&thinsp;{stats.n}:</span>
+      <span className="fs-w">{stats.w}V</span>
+      <span className="fs-d">{stats.d}E</span>
+      <span className="fs-l">{stats.l}D</span>
+      <span className="muted fs-avg">{fmt(stats.gf)}&thinsp;/&thinsp;{fmt(stats.ga)}&thinsp;g</span>
+    </div>
+  )
+}
 
 function HeadToHead({ event, ranking }: { event: SlimEvent; ranking: FifaRanking | null }) {
   const { data, loading, error, reload } = useAsync(
@@ -205,6 +241,11 @@ export function MatchDetail({ eventId }: { eventId: number }) {
             Ver no Sofascore ↗
           </a>
         </div>
+        <div className="form-summaries">
+          <TeamFormSummary team={event.homeTeam} />
+          <TeamFormSummary team={event.awayTeam} />
+        </div>
+
         <div className="window-control">
           <span className="muted">Janela do ranking FIFA:</span>
           <button type="button" onClick={() => setWindowN((n) => Math.max(1, n - 1))}>
